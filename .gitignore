@@ -34,3 +34,4 @@ lib/
 *.img
 *.iso
 *.rom
+initrd/
