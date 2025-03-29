@@ -79,14 +79,15 @@ Begin
             Offs := Offs + Integer(bootboot.fb_scanline);
         End;
 
-        Inc(s);
-
-        if (CurrX < bootboot.fb_width Div (_binary_font_psf_start.width+1)) then
+        // The wrapping starts too soon
+        if (CurrX < bootboot.fb_width Div (_binary_font_psf_start.width + 1)) then
             Inc(CurrX)
         else begin
             Inc(CurrY, _binary_font_psf_start.height + 1);
             CurrX := 0;
         end;
+
+        Inc(s);
     End;
 
     // Now handle the "suffix"

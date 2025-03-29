@@ -19,19 +19,19 @@ Begin
              'Made by Le Bao Nguyen and Danilo Bleul.' + sLineBreak +
              'This isssssssssssssssssssssss a verrrrrrrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyy long text just to know if text wrapping works;)');
 
-        Puts('W', ' ');
+        Puts('C', ' ');
         SetBackgroundColor(ColorAqua);
-        Puts('E', ' ');
+        Puts('O', ' ');
         SetBackgroundColor(ColorNavy);
         Puts('L', ' ');
         SetForegroundColor(ColorFuchsia);
-        Puts('C', ' ');
-        SetForegroundColor(ColorYellow);
         Puts('O', ' ');
+        SetForegroundColor(ColorYellow);
+        Puts('U', ' ');
         SetBackgroundColor(ColorRed);
-        Puts('M', ' ');
+        Puts('R', ' ');
         SetForegroundColor(ColorOlive);
-        Puts('E');
+        Puts('S');
 
         ResetColors;
 
