@@ -18,11 +18,20 @@ const
 var
     CurrX: Integer = 0;
     CurrY: Integer = 0;
+    CurrForeground: longint = ColorWhite;
+    CurrBackground: longint = ColorBlack;
 
 procedure Puts(s: PChar); overload;
-procedure Puts(s: PChar; color: longint); overload;
-procedure Puts(s: PChar; color: longint; background: longint); overload;
+procedure Puts(s: PChar; endStr: PChar); overload;
+procedure Puts(i: integer); overload;
+procedure ClearScreen;
 
 procedure GoToX(NewX: Integer);
 procedure GoToY(NewY: Integer);
 procedure GoToPos(NewX, NewY: Integer);
+
+procedure SetForegroundColor(fore: longint);
+procedure SetBackgroundColor(back: longint);
+procedure ResetForeground;
+procedure ResetBackground;
+procedure ResetColors;

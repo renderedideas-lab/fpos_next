@@ -1,4 +1,4 @@
-PASFLAGS = -Aelf -n -O3 -Xd -CX -XXs -Tlinux -Fi../include
+PASFLAGS = -Aelf -n -O3 -Xd -CX -XXs -Tlinux -Fi../include -Si
 LDFLAGS = -nostdlib -n -T link.ld
 STRIPFLAGS = -s -K mmio -K fb -K bootboot -K environment -K initstack
 

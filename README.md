@@ -6,10 +6,10 @@ Starting from scratch with Bootboot's example, FPOS now lives again!
 ## Requirements
 
 * Free Pascal Compiler 3.2 (3.3 seems to have problems)
-* x86_64 and/or aarch64 ld, strip, readelf
+* ld, strip, readelf - for supported AND target platform (see below)
 * Bootboot's mkbootimg
 * Make
-* Grub-mkrescue (optional)
+* grub2-mkrescue and xorriso (optional)
 * QEMU/VirtualBox/VMWare (optional, to try out the image)
 
 For the best results and time, build on UNIX.
@@ -40,13 +40,7 @@ To create disk/cdrom image:
 $ make disk
 ```
 
-To create a ROM image:
-
-```bash
-$ make initrd.rom
-```
-
-To create an ISO (requires grub-mkrescue):
+To create an ISO (requires grub2-mkrescue and xorriso):
 
 ```bash
 $ make grub.iso

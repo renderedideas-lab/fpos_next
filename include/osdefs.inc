@@ -27,10 +27,18 @@ Type
     DWord = UInt32;
     PDWord = ^DWord;
     HRESULT = QWord;
-    TTypeKind = QWord;
+    PUInt = QWord;
     
     PChar = ^Char;
     PByte = ^Byte;
+
+    TTypeKind = (
+        tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat, tkSet,
+        tkMethod, tkSString, tkLString, tkAString, tkWString, tkVariant, tkArray,
+        tkRecord, tkInterface, tkClass, tkObject, tkWChar, tkBool, tkInt64, tkQWord,
+        tkDynArray, tkInterfaceRaw, tkProcVar, tkUString, tkUChar, tkHelper, tkFile,
+        tkClassRef, tkPointer
+    );
 
     TExceptAddr = Record
     End;
@@ -47,14 +55,16 @@ Type
             Data3: word;
             Data4: array [0 .. 7] of byte;
         );
+        
         2: (
             D1: DWord;
             D2: word;
             D3: word;
             D4: array [0 .. 7] of byte;
         );
-        3:
-        ( { uuid fields according to RFC4122 }
+
+        3: (
+            { uuid fields according to RFC4122 }
             time_low: DWord; // The low field of the timestamp
             time_mid: word; // The middle field of the timestamp
             time_hi_and_version: word;
@@ -67,15 +77,17 @@ Type
     End;
 
     Ppsf = ^Tpsf;
+
+    { PC Screen Font 2 record. }
     Tpsf = Packed Record
         magic : UInt32;
         version : UInt32;
-        headersize : UInt32;
+        headersize : UInt32; { Size of the header, usually 4 * 8 = 32 bytes }
         flags : UInt32;
-        numglyph : UInt32;
+        numglyph : UInt32; { Number of glyphs }
         bytesperglyph : UInt32;
-        height : UInt32;
-        width : UInt32;
+        height : UInt32; { Height of each glyph, in case you suddently become an idiot/dumb }
+        width : UInt32; { Width of each glyph }
     End;
 
 var
