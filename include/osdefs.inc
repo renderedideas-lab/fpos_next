@@ -14,6 +14,12 @@ Const
 Type
     Cardinal = 0..$FFFFFFFF;
     
+    // You know what
+    // FPC 3.3 requires this.
+    {$if FPC_FULLVERSION >= 30300}
+	Char = #0..#255;
+    {$endif}
+    
     Int8 = ShortInt;
     Int16 = SmallInt;
     Int32 = LongInt;
@@ -22,7 +28,7 @@ Type
     UInt8 = Byte;
     UInt16 = Word;
     UInt32 = Cardinal;
-    Uint64 = QWord;
+    UInt64 = QWord;
 
     DWord = UInt32;
     PDWord = ^DWord;

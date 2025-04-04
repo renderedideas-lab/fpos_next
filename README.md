@@ -10,9 +10,11 @@ Starting from scratch with Bootboot's example, FPOS now lives again!
 * Bootboot's mkbootimg
 * Make
 * grub2-mkrescue and xorriso (optional)
-* QEMU/VirtualBox/VMWare (optional, to try out the image)
+* QEMU/VirtualBox/VMWare (to try out the image)
 
-For the best results and time, build on UNIX.
+If you want to test the image, better use QEMU. VirtualBox + VMWare on Windows are confirmed to not working (yet).
+
+Real hardware is not tested yet.
 
 ## Build steps
 
@@ -46,12 +48,23 @@ To create an ISO (requires grub2-mkrescue and xorriso):
 $ make grub.iso
 ```
 
+To boot in QEMU:
+
+```bash
+$ make boot
+```
+
+To boot in QEMU using generated GRUB iso:
+
+```bash
+$ make boot-grub
+```
+
 ## Environment variables
 
 | Variable name  	| Job                                                            	| Acceptable values                                  	| Default value                         	|
 |----------------	|----------------------------------------------------------------	|----------------------------------------------------	|---------------------------------------	|
-| PLATFORM       	| Specify the platform that FPOS should target                   	| x86_64 aarch64 riscv64                             	| x86_64                                   	|
-| OVMF           	| Path of OVMF.fd (for testing with EFI)                         	| Path to any valid OVMF.fd (accepts relative paths) 	| /usr/share/qemu/bios-TianoCoreEFI.bin 	|
+| PLATFORM       	| Specify the platform that FPOS should target                   	| \*many or not?\*                             	| x86_64                                   	|
 | AMD64_PREFIX   	| Prefix of ld, strip etc. commands, for AMD64 (x86_64) platform 	| Any                                                	| x86_64-linux-gnu-                     	|
 | AARCH64_PREFIX 	| Same as AMD64_PREFIX, but for aarch64 platform                 	| Any                                                	| aarch64-linux-gnu-                    	|
 | RISCV64_PREFIX 	| Same as AMD64_PREFIX, but for riscv64 platform                 	| Any                                                	| riscv64-linux-gnu-                    	|

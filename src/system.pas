@@ -42,7 +42,7 @@ Implementation
 
 function ParamCount: LongInt; begin end;
 
-function ParamStr(idx: LongInt): string; begin end;
+function ParamStr(idx: LongInt): shortstring; begin end;
 
 procedure Randomize; begin end;
 

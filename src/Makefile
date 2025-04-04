@@ -1,4 +1,4 @@
-PASFLAGS = -Aelf -n -O3 -Xd -CX -XXs -Tlinux -Fi../include -Si
+PASFLAGS = -Aelf -n -O3 -Xd -CX -XXs -Tlinux -Fi../include -Si -va
 LDFLAGS = -nostdlib -n -T link.ld
 STRIPFLAGS = -s -K mmio -K fb -K bootboot -K environment -K initstack
 
@@ -19,6 +19,7 @@ endif
 endif
 
 fpos.elf: main.pas ../include/main.inc
+	fpc -P$(PLATFORM) $(PASFLAGS) system.pas
 	fpc -P$(PLATFORM) $(PASFLAGS) main.pas
 	$(TARGET_PREFIX)ld -r -b binary -o font.o font.psf
 	$(TARGET_PREFIX)ld $(LDFLAGS) main.o font.o -o fpos.$(PLATFORM).elf

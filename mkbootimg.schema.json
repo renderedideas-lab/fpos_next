@@ -1,0 +1,88 @@
+{
+    "type": "object",
+    "title": "mkbootimg",
+    "description": "mkbootimg settings",
+    "required": [ "config", "initrd" ],
+    "properties": {
+        "disksize": {
+            "type": "integer",
+            "description": "The size of the disk image in Megabytes. If not given: default to be calculated.",
+            "default": 128
+        },
+        "diskguid": {
+            "type": "number",
+            "description": "The disk GUID. If not given/full of zeros: default to be calculated."
+        },
+        "align": {
+            "type": "integer",
+            "description": "The partition alignment in Kilobytes. Zero gives sector alignment."
+        },
+        "config": {
+            "type": "string",
+            "description": "The path to the config file."
+        },
+        "iso9660": {
+            "type": "boolean",
+            "description": "Whether to generate ISO9660 Boot Catalog into the image. Defaults to false",
+            "default": false
+        },
+        "initrd": {
+            "type": "object",
+            "description": "The initrd settings.",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "The type of the initrd."
+                },
+                "gzip": {
+                    "type": "boolean",
+                    "description": "Whether to gzip the initrd. Defaults to true.",
+                    "default": true
+                },
+                "directory": {
+                    "type": ["string", "array"],
+                    "description": "The path to the directory whose contents will be used to generated the initrd. Can be an array for multiarch images."
+                },
+                "file": {
+                    "type": ["string", "array"],
+                    "description": "The name of the image file to be used. Can be an array for multiarch images."
+                }
+            },
+            "required": [ "type", "directory" ]
+        },
+        "partitions": {
+            "type": "array",
+            "description": "The partitions to be created.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "Partition format."
+                    },
+                    "size": {
+                        "type": "integer",
+                        "description": "The size of the partition in Megabytes. Defaults to be calculated."
+                    },
+                    "file": {
+                        "type": "string",
+                        "description": "The name of the partition file to be used."
+                    },
+                    "directory": {
+                        "type": "string",
+                        "description": "The path to the directory whose contents will be used to generated the partition."
+                    },
+                    "driver": {
+                        "type": "string",
+                        "description": "The driver to be used for the partition. Optional, made for cases type can't specify the format without a doubt."
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "UTF-8 partion name, limited to code points 32 to 65535 (BMP)"
+                    }
+                },
+                "required": [ "type", "size" ]
+            }
+        }
+    }
+}

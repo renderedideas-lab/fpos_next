@@ -1,6 +1,7 @@
 {
+    "$schema": "./mkbootimg.schema.json",
     "disksize": 128,
-    "config": "./config",
+    "config": "./iso/bootboot/config",
     "initrd": { "type": "cpio", "gzip": true, "directory": "initrd" },
     "iso9660": true,
     "partitions": [

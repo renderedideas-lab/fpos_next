@@ -14,8 +14,18 @@ Var
     Glyph : PByte; // glyph of the character to be rendered
     P : PDword;
     S2: integer;
+    YPos: integer;
 
-Begin
+    procedure NewLine;
+    begin
+        Inc(YPos, _binary_font_psf_start.height + 1);
+        Inc(CurrY);
+        CurrX := 0;
+    end;
+
+begin
+    YPos := CurrY * (_binary_font_psf_start.height + 1);
+
     // Needs comments about how this works.
     // But basically: find the right glyph for the character,
     // calculate character width & height then print the character.
@@ -23,26 +33,26 @@ Begin
     // Number of bytes per row.
     S2 := Integer(bootboot.fb_scanline);
 
-    // Someone explain this.
     // This should partially help:
     // https://en.wikipedia.org/wiki/PC_Screen_Font#File_bitmaps
     BytesPerRow := (_binary_font_psf_start.width + 7) shr 3;
     
-    While (s^ <> #0) Do
-    Begin
-
+    while (s^ <> #0) do
+    begin
         // Check for new line characters
         // New vocabulary addition: carriage return (#10)
         // moves, in this function, CurrX, to zero.
         // TLDR: jumps to the start of the line.
-        if (s^ = #13) or (s^ = #10) then
-        begin
-            CurrX := 0;
+        if (s^ = #13) then begin
+            NewLine;
             Inc(s);
+            Continue;
+        end;
 
-            if (s^ = #13) then
-                Inc(CurrY, _binary_font_psf_start.height + 1);
-            continue;
+        if (s^ = #10) then begin
+            Inc(s);
+            CurrX := 0;
+            Continue;
         end;
 
         // Get the glyph address for the character we're going to render
@@ -51,51 +61,45 @@ Begin
             Integer(s^) * _binary_font_psf_start.bytesperglyph // location of the character in the font
         );
         
-        Offs := (CurrX * _binary_font_psf_start.width * 4) + S2 * CurrY;
+        Offs := (CurrX * _binary_font_psf_start.width * 4) + S2 * YPos;
         //               ^^ glyph width + 0 spacing bonus
         //                                              ^ Pixels are stored as 32-bit/4 byte values
         
-        For Y := 0 to (_binary_font_psf_start.height-1) Do
-        Begin
+        for Y := 0 to (_binary_font_psf_start.height-1) do
+        begin
             Line := Offs;
             Mask := 1 shl (_binary_font_psf_start.width - 1);
 
-            For X := 0 to (_binary_font_psf_start.width - 1) Do
-            Begin
+            for X := 0 to (_binary_font_psf_start.width - 1) do
+            begin
                 // Locate where to draw
                 P := PDword(@fb + Line);
 
                 // Set the fore/background.
                 If ((Glyph^ and Mask) <> 0) Then
-                    P^ := CurrForeground
+                    P^ := Currforeground
                 Else
                     P^ := CurrBackground;
 
                 Mask := Mask shr 1;
-                Line := Line + 4;
+                Inc(Line, 4);
             End;
         
-            Glyph := Glyph + BytesPerRow;
-            Offs := Offs + Integer(bootboot.fb_scanline);
+            Inc(Glyph, BytesPerRow);
+            Inc(Offs, Integer(bootboot.fb_scanline));
         End;
 
-        // The wrapping starts too soon
-        if (CurrX < bootboot.fb_width Div (_binary_font_psf_start.width + 1)) then
+        if CurrX < bootboot.fb_width then
             Inc(CurrX)
-        else begin
-            Inc(CurrY, _binary_font_psf_start.height + 1);
-            CurrX := 0;
-        end;
+        else
+            NewLine;
 
         Inc(s);
     End;
 
     // Now handle the "suffix"
-    if (endStr = nil) then
-    begin
-        Inc(CurrY, _binary_font_psf_start.height + 1);
-        CurrX := 0;
-    end
+    if (endStr = nil) or (endStr = PChar(sLineBreak)) then
+        NewLine
     else if (endStr <> PChar('')) then
         Puts(endStr, '');
 End;
@@ -136,8 +140,7 @@ begin
         digit := -i;
         minus := True;
     end
-    else
-    begin
+    else begin
         digit := i;
         minus := False;
     end;
@@ -158,12 +161,10 @@ begin
 end;
 
 procedure ClearScreen;
-var W, H, X, Y, S: integer;
+var X, Y, S: integer;
     P: PDWord;
 begin
     S := integer(bootboot.fb_scanline);
-    W := Integer(bootboot.fb_width);
-    H := Integer(bootboot.fb_height);
 
     for Y := 0 to Integer(bootboot.fb_height) do
     begin
@@ -175,12 +176,11 @@ begin
     end;
 
     GoToPos(0, 0);
-
 end;
 
-procedure SetForegroundColor(fore: longint);
+procedure SetforegroundColor(fore: longint);
 begin
-    CurrForeground := fore;
+    Currforeground := fore;
 end;
 
 procedure SetBackgroundColor(back: longint);
@@ -188,9 +188,9 @@ begin
     CurrBackground := back;
 end;
 
-procedure ResetForeground; inline;
+procedure Resetforeground; inline;
 begin
-    CurrForeground := ColorWhite;
+    Currforeground := ColorWhite;
 end;
 
 procedure ResetBackground; inline;
@@ -200,6 +200,6 @@ end;
 
 procedure ResetColors;
 begin
-    ResetForeground;
+    Resetforeground;
     ResetBackground;
 end;
