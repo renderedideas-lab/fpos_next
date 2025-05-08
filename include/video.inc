@@ -24,6 +24,7 @@ var
 procedure Puts(s: PChar); overload;
 procedure Puts(s: PChar; endStr: PChar); overload;
 procedure Puts(i: integer); overload;
+procedure Puts(i: integer; endStr: PChar); overload;
 procedure ClearScreen;
 
 procedure GoToX(NewX: Integer);
@@ -35,3 +36,5 @@ procedure SetBackgroundColor(back: longint);
 procedure ResetForeground;
 procedure ResetBackground;
 procedure ResetColors;
+
+procedure Scroll;

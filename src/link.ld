@@ -28,6 +28,7 @@
  */
 
 ENTRY(_start)
+INPUT(test.o system.o video.o main.o font.o gdt.o)
 
 mmio        = 0xfffffffff8000000;              /* these are configurable for level 2 loaders */
 fb          = 0xfffffffffc000000;

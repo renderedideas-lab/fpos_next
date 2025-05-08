@@ -5,6 +5,7 @@ end;
 
 procedure _start(); stdcall; [public, alias: '_start'];
 var S: integer;
+    // I: integer;
 Begin
 
     S := Integer(bootboot.fb_scanline);
@@ -16,6 +17,9 @@ Begin
 
         Puts('Screen height:', ' ');
         Puts(bootboot.fb_height);
+
+        Puts('Maximum lines:', ' ');
+        Puts(bootboot.fb_height div _binary_font_psf_start.height);
 
         // ClearScreen;
 
@@ -57,6 +61,30 @@ Begin
         Puts(BCDToDecimal(bootboot.datetime[7]));
 
         Puts('Type help for available commands.');
+        // Puts(bootboot.fb_height div _binary_font_psf_start.height);
+
+        // for i := 0 to (bootboot.fb_height div _binary_font_psf_start.height) - 1 do
+        //     Puts(i);
+        // for i := 0 to 750 do
+        //     Puts(i);
+
+        Puts('[Doing] GDT initialization...');
+
+        GDTPtr.Limit := SizeOf(GDTList) - 1;
+        
+        GDTPtr.Base := PUint(@GDTList[0]);
+        
+        GDT.SetGate(0, 0, 0, 0, 0); // nil descriptor
+        GDT.SetGate(1, 0, $FFFFFFFF, $9A, $CF); // Kernel space code
+        GDT.SetGate(2, 0, $FFFFFFFF, $92, $CF); // Kernel space data
+        GDT.SetGate(3, 0, $FFFFFFFF, $FA, $CF); // User space code
+        GDT.SetGate(4, 0, $FFFFFFFF, $F2, $CF); // User space data
+        // TODO: Task state segment (TSS) descriptor
+
+        Puts('[Doing] Flush GDT...');
+        flushGDT;
+
+        Puts('[Done] GDT initialization.');
     End;
     
     shutdown;

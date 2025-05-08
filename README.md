@@ -33,7 +33,7 @@ $ make all
 To compile:
 
 ```bash
-$ make compile
+$ make fpc_all
 ```
 
 To create disk/cdrom image:
@@ -58,6 +58,18 @@ To boot in QEMU using generated GRUB iso:
 
 ```bash
 $ make boot-grub
+```
+
+To regenerate Makefile (requires fpcmake):
+
+```bash
+$ make makefiles
+```
+
+Or:
+
+```bash
+$ fpcmake -w -Tall
 ```
 
 ## Environment variables

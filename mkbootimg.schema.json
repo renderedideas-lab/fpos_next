@@ -6,12 +6,12 @@
     "properties": {
         "disksize": {
             "type": "integer",
-            "description": "The size of the disk image in Megabytes. If not given: default to be calculated.",
+            "description": "The size of the disk image in Megabytes. If not given: defaults to be calculated.",
             "default": 128
         },
         "diskguid": {
             "type": "number",
-            "description": "The disk GUID. If not given/full of zeros: default to be calculated."
+            "description": "The disk GUID. If not given/full of zeros: defaults to be calculated."
         },
         "align": {
             "type": "integer",

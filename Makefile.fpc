@@ -1,0 +1,36 @@
+; Makefile must be updated to reflect changes
+; from this file. Can use make makefiles or fpcmake -w -Tall.
+
+[package]
+name=fpos_next
+version=1.0.alpha
+
+; For maintainers:
+; make clean is required to apply changes from any Makefile.
+[target]
+units=system main gdt
+
+[require]
+libc=n
+nortl=y
+
+[compiler]
+unitdir=src
+includedir=include
+targetdir=src
+sourcedir=src
+unittargetdir=src
+options=-Aelf -n -O3 -Xd -CX -XXs -Tlinux -Si -va
+
+[clean]
+files=src/*.elf *.iso *.img *.bin initrd/sys/core
+
+[install]
+fpcpackage=n
+
+; For contributors:
+; Below is plain Makefile syntax, which will be copied as-is to our Makefile.
+; Our variables still work.
+[rules]
+include disk.Makefile
+all: fpc_all fpos.elf initdir disk boot

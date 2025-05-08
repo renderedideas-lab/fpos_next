@@ -30,17 +30,18 @@
 Unit main;
 
 {$if FPC_FULLVERSION<30200}
-  {$fatal At least FPC 3.2.0 is required to compile the compiler}
+	{$fatal At least FPC 3.2.0 is required to compile the compiler}
 {$endif}
 
 Interface
 
-{$I main.inc}
-{$I video.inc}
+procedure _start(); stdcall;
+procedure shutdown;
 
 Implementation
 
+uses gdt, video;
+
 {$I main.impl.inc}
-{$I video.impl.inc}
 
 End.

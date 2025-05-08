@@ -18,8 +18,19 @@ Var
 
     procedure NewLine;
     begin
-        Inc(YPos, _binary_font_psf_start.height + 1);
-        Inc(CurrY);
+        Inc(YPos, (_binary_font_psf_start.height + 1));
+        
+        // Puts(CurrY, ' ');
+        
+        if (CurrY >= (bootboot.fb_height div (_binary_font_psf_start.height + 1))) or
+           (CurrX >= (bootboot.fb_width  div (_binary_font_psf_start.width  + 1))) then
+        begin
+            Scroll;
+            YPos := (Integer(bootboot.fb_height) - 1) * ((_binary_font_psf_start.height + 1));
+        end
+        else
+            Inc(CurrY);
+        
         CurrX := 0;
     end;
 
@@ -61,11 +72,11 @@ begin
             Integer(s^) * _binary_font_psf_start.bytesperglyph // location of the character in the font
         );
         
-        Offs := (CurrX * _binary_font_psf_start.width * 4) + S2 * YPos;
+        Offs := (CurrX * (_binary_font_psf_start.width  + 1)* 4) + S2 * YPos;
         //               ^^ glyph width + 0 spacing bonus
         //                                              ^ Pixels are stored as 32-bit/4 byte values
         
-        for Y := 0 to (_binary_font_psf_start.height-1) do
+        for Y := 0 to (_binary_font_psf_start.height - 1) do
         begin
             Line := Offs;
             Mask := 1 shl (_binary_font_psf_start.width - 1);
@@ -102,30 +113,15 @@ begin
         NewLine
     else if (endStr <> PChar('')) then
         Puts(endStr, '');
-End;
-
-procedure GoToX(NewX: Integer);
-begin
-    Assert(NewX <= Integer(bootboot.fb_width));
-    Assert(NewX >= 0);
-    CurrX := NewX;
 end;
 
-procedure GoToY(NewY: Integer);
+procedure Puts(i: integer); inline;
 begin
-    Assert(NewY <= Integer(bootboot.fb_height));
-    Assert(NewY >= 0);
-    CurrY := NewY;
-end;
-
-procedure GoToPos(NewX, NewY: Integer);
-begin
-    GoToX(NewX);
-    GoToY(NewY);
+    Puts(i, nil);
 end;
 
 // Taken from OSDev wiki
-procedure Puts(i: integer);
+procedure Puts(i: integer; endStr: PChar);
 var
     buffer: array [0..11] of Char;
     str: PChar;
@@ -157,7 +153,31 @@ begin
         str^ := '-';
     end;
 
-    Puts(str);
+    Puts(str, endStr);
+end;
+
+procedure GoToX(NewX: Integer); inline;
+begin
+    // FIXME: This is not the right way to do this.
+    Assert(NewX <= Integer(bootboot.fb_width));
+    Assert(NewX >= 0);
+    // End FIXME
+    CurrX := NewX;
+end;
+
+procedure GoToY(NewY: Integer); inline;
+begin
+    // FIXME: Same reason as GoToX
+    Assert(NewY <= Integer(bootboot.fb_height));
+    Assert(NewY >= 0);
+    // End FIXME
+    CurrY := NewY;
+end;
+
+procedure GoToPos(NewX, NewY: Integer); inline;
+begin
+    GoToX(NewX);
+    GoToY(NewY);
 end;
 
 procedure ClearScreen;
@@ -178,12 +198,12 @@ begin
     GoToPos(0, 0);
 end;
 
-procedure SetforegroundColor(fore: longint);
+procedure SetforegroundColor(fore: longint); inline;
 begin
     Currforeground := fore;
 end;
 
-procedure SetBackgroundColor(back: longint);
+procedure SetBackgroundColor(back: longint); inline;
 begin
     CurrBackground := back;
 end;
@@ -203,3 +223,9 @@ begin
     Resetforeground;
     ResetBackground;
 end;
+
+procedure Scroll;
+begin
+end;
+
+end.

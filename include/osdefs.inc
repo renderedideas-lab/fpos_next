@@ -37,6 +37,10 @@ Type
     
     PChar = ^Char;
     PByte = ^Byte;
+    PUInt8 = ^UInt8;
+    PUInt16 = ^UInt16;
+    PUInt32 = ^UInt32;
+    PUInt64 = ^UInt64;
 
     TTypeKind = (
         tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat, tkSet,
@@ -95,6 +99,30 @@ Type
         height : UInt32; { Height of each glyph, in case you suddently become an idiot/dumb }
         width : UInt32; { Width of each glyph }
     End;
+
+    TGDTEntry = packed record
+        LowLimit: Word;
+        LowBase: Word;
+        MiddleBase: Byte;
+        Access: Byte;
+        Granularity: Byte;
+        HighBase: Byte;
+    end;
+
+    TGDTPtr = packed record
+        Limit: Word;
+        Base: LongWord;
+    end;
+
+    TInterruptDes = packed record
+        AddressLow: uint16;
+        Selector: uint16;
+        Ist: uint8;
+        Flags: uint8;
+        AddressMid: uint16;
+        AddressHigh: uint32;
+        Reserved: uint32;
+    end;
 
 var
     ExitCode: HRESULT = 0; export name 'operatingsystem_result';

@@ -23,14 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
- * This file is part of the BOOTBOOT Protocol package.
- * @brief Indirectly and unintuitively compiled by FPC along with kernel.pas
- *
  *}
 
 Unit System;
 
 {$define FPS_IS_SYSTEM}
+{$define FPOS}
+{$define FPOSVER 0010}
 
 Interface
 
