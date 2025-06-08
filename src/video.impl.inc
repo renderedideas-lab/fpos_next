@@ -17,25 +17,29 @@ Var
     YPos: integer;
 
     procedure NewLine;
+    var
+        reachedLineLimit : boolean;
+        reachedColLimit : boolean;
     begin
-        Inc(YPos, (_binary_font_psf_start.height + 1));
+
+        reachedLineLimit := CurrY >= (bootboot.fb_height div _binary_font_psf_start.height);
+        reachedColLimit := CurrX >= (bootboot.fb_width  div _binary_font_psf_start.width);
         
-        // Puts(CurrY, ' ');
-        
-        if (CurrY >= (bootboot.fb_height div (_binary_font_psf_start.height + 1))) or
-           (CurrX >= (bootboot.fb_width  div (_binary_font_psf_start.width  + 1))) then
+        if (reachedLineLimit) and (reachedColLimit) then
         begin
             Scroll;
-            YPos := (Integer(bootboot.fb_height) - 1) * ((_binary_font_psf_start.height + 1));
+            YPos := (Integer(bootboot.fb_height) - 1) * _binary_font_psf_start.height;
         end
-        else
+        else begin
+            Inc(YPos, _binary_font_psf_start.height);
             Inc(CurrY);
+        end;
         
         CurrX := 0;
     end;
 
 begin
-    YPos := CurrY * (_binary_font_psf_start.height + 1);
+    YPos := CurrY * _binary_font_psf_start.height;
 
     // Needs comments about how this works.
     // But basically: find the right glyph for the character,
@@ -72,9 +76,9 @@ begin
             Integer(s^) * _binary_font_psf_start.bytesperglyph // location of the character in the font
         );
         
-        Offs := (CurrX * (_binary_font_psf_start.width  + 1)* 4) + S2 * YPos;
-        //               ^^ glyph width + 0 spacing bonus
-        //                                              ^ Pixels are stored as 32-bit/4 byte values
+        Offs := (CurrX * _binary_font_psf_start.width * 4) + S2 * YPos;
+        //               ^^ glyph width + 1 spacing bonus
+        //                                             ^ Pixels are stored as 32-bit/4 byte values
         
         for Y := 0 to (_binary_font_psf_start.height - 1) do
         begin
@@ -100,7 +104,7 @@ begin
             Inc(Offs, Integer(bootboot.fb_scanline));
         End;
 
-        if CurrX < bootboot.fb_width then
+        if CurrX < (bootboot.fb_width div _binary_font_psf_start.width) then
             Inc(CurrX)
         else
             NewLine;
@@ -158,19 +162,15 @@ end;
 
 procedure GoToX(NewX: Integer); inline;
 begin
-    // FIXME: This is not the right way to do this.
-    Assert(NewX <= Integer(bootboot.fb_width));
+    Assert(NewX <= Integer(bootboot.fb_width) div _binary_font_psf_start.width);
     Assert(NewX >= 0);
-    // End FIXME
     CurrX := NewX;
 end;
 
 procedure GoToY(NewY: Integer); inline;
 begin
-    // FIXME: Same reason as GoToX
-    Assert(NewY <= Integer(bootboot.fb_height));
+    Assert(NewY <= Integer(bootboot.fb_height) div _binary_font_psf_start.height);
     Assert(NewY >= 0);
-    // End FIXME
     CurrY := NewY;
 end;
 
@@ -190,7 +190,7 @@ begin
     begin
         for X := 0 to integer(bootboot.fb_width) do
         begin
-            P := PDWord(@fb + (X * (_binary_font_psf_start.width+1) * 4) + S * Y);
+            P := PDWord(@fb + (X * _binary_font_psf_start.width * 4) + S * Y);
             P^ := ColorBlack;
         end;
     end;

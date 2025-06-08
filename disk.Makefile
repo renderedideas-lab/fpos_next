@@ -1,4 +1,4 @@
-QEMU_FLAGS = -serial stdio -rtc base=localtime,clock=vm
+QEMU_FLAGS = -serial stdio -rtc base=localtime,clock=vm -S -s
 
 fpos.elf: clean fpc_all
 	$(MAKE) -C src fpos.elf

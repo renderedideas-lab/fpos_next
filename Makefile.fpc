@@ -20,7 +20,7 @@ includedir=include
 targetdir=src
 sourcedir=src
 unittargetdir=src
-options=-Aelf -n -O3 -Xd -CX -XXs -Tlinux -Si -va
+options=-Aelf -n -Xd -Tlinux -Si -va
 
 [clean]
 files=src/*.elf *.iso *.img *.bin initrd/sys/core

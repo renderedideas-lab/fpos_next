@@ -100,29 +100,5 @@ Type
         width : UInt32; { Width of each glyph }
     End;
 
-    TGDTEntry = packed record
-        LowLimit: Word;
-        LowBase: Word;
-        MiddleBase: Byte;
-        Access: Byte;
-        Granularity: Byte;
-        HighBase: Byte;
-    end;
-
-    TGDTPtr = packed record
-        Limit: Word;
-        Base: LongWord;
-    end;
-
-    TInterruptDes = packed record
-        AddressLow: uint16;
-        Selector: uint16;
-        Ist: uint8;
-        Flags: uint8;
-        AddressMid: uint16;
-        AddressHigh: uint32;
-        Reserved: uint32;
-    end;
-
 var
     ExitCode: HRESULT = 0; export name 'operatingsystem_result';

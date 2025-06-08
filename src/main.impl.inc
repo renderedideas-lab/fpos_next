@@ -75,10 +75,10 @@ Begin
         GDTPtr.Base := PUint(@GDTList[0]);
         
         GDT.SetGate(0, 0, 0, 0, 0); // nil descriptor
-        GDT.SetGate(1, 0, $FFFFFFFF, $9A, $CF); // Kernel space code
-        GDT.SetGate(2, 0, $FFFFFFFF, $92, $CF); // Kernel space data
-        GDT.SetGate(3, 0, $FFFFFFFF, $FA, $CF); // User space code
-        GDT.SetGate(4, 0, $FFFFFFFF, $F2, $CF); // User space data
+        GDT.SetGate(1, 0, $FFFFFFFF, $9A, $A); // Kernel space code
+        GDT.SetGate(2, 0, $FFFFFFFF, $92, $C); // Kernel space data
+        GDT.SetGate(3, 0, $FFFFFFFF, $FA, $A); // User space code
+        GDT.SetGate(4, 0, $FFFFFFFF, $F2, $C); // User space data
         // TODO: Task state segment (TSS) descriptor
 
         Puts('[Doing] Flush GDT...');
